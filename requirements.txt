@@ -1,0 +1,8 @@
+# Core dependencies
+jax>=0.4.0
+jaxlib>=0.4.0
+numpy>=1.20.0
+pygame>=2.0.0
+
+# Craftax (install from source)
+# git+https://github.com/MichaelTMatthews/Craftax.git
