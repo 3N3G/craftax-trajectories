@@ -39,10 +39,14 @@ env/
 
 # Trajectory recordings
 trajectory_recordings/
+traj_*/
 *.zip
 *.npz
 *.pbz2
 *.npy
+
+# Craftax clone
+Craftax/
 
 # Testing
 .pytest_cache/

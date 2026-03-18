@@ -1,8 +1,10 @@
 # Core dependencies
-jax>=0.4.0
-jaxlib>=0.4.0
 numpy>=1.20.0
 pygame>=2.0.0
+ml-dtypes>=0.1.0
+scipy>=1.7
+opt-einsum
 
-# Craftax (install from source)
-# git+https://github.com/MichaelTMatthews/Craftax.git
+# JAX installation - see README for platform-specific instructions
+# DO NOT use jax[cpu] or jax[cuda] extras in requirements.txt as they cause issues
+# Instead, follow the platform-specific installation in README.md

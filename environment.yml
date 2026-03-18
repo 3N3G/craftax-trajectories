@@ -1,0 +1,13 @@
+name: craftax-recording
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+      - numpy
+      - pygame
+      - scipy
+      - ml-dtypes
+      - opt-einsum
