@@ -322,6 +322,11 @@ def main(args=None):
                 done=done,
             )
 
+            # Stop recording after entering level 2 (floors 0, 1, 2 recorded)
+            if env_state.player_level >= 2:
+                print(f"\nEntered level {env_state.player_level}. Stopping recording (floors 0, 1, 2 recorded).")
+                break
+
             if done and not args.continue_after_done:
                 terminated_by_done = True
                 print("\nEpisode complete (done=True). Stopping recording.")
