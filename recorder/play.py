@@ -286,6 +286,7 @@ def main(args=None):
 
     pixel_render_size = 64 // BLOCK_PIXEL_SIZE_HUMAN
     renderer = CraftaxRenderer(env, env_params, pixel_render_size=pixel_render_size)
+    pygame.key.set_repeat()  # Disable key repeat to prevent duplicate actions during lag
     renderer.render(env_state)
 
     step_fn = jax.jit(env.step)
