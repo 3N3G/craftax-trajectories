@@ -534,10 +534,10 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         traj_dir = sys.argv[1]
     else:
-        # Find most recent trajectory
+        # Find most recent trajectory directory
         traj_recordings = Path("trajectory_recordings")
         if traj_recordings.exists():
-            trajectories = sorted(traj_recordings.glob("traj_*"), key=lambda p: p.stat().st_mtime, reverse=True)
+            trajectories = sorted([p for p in traj_recordings.glob("traj_*") if p.is_dir()], key=lambda p: p.stat().st_mtime, reverse=True)
             if trajectories:
                 traj_dir = trajectories[0]
             else:

@@ -139,7 +139,7 @@ class TrajectoryRecorder:
         with self.text_log_path.open("a") as f:
             f.write(json.dumps(entry) + "\n")
 
-    def finalize(self, auto_zip: bool = True):
+    def finalize(self, auto_zip: bool = True, final_env_state=None):
         """Save all trajectory data and optionally create a zip archive."""
         num_timesteps = len(self.obs_vectors)
         if num_timesteps == 0:
@@ -229,6 +229,27 @@ class TrajectoryRecorder:
             if zip_path:
                 print(f"\nZIP ARCHIVE: {zip_path}")
                 print("=" * 60)
+
+        # Check if this was a failed run (died on floor 0 or 1)
+        if final_env_state is not None and self.dones[-1]:
+            final_floor = int(final_env_state.player_level)
+            if final_floor <= 1:
+                import shutil
+                fails_dir = self.save_dir.parent / "fails"
+                fails_dir.mkdir(exist_ok=True)
+
+                dest_dir = fails_dir / self.save_dir.name
+                print(f"\n⚠️  Died on floor {final_floor}. Moving to fails directory...")
+                shutil.move(str(self.save_dir), str(dest_dir))
+
+                # Move zip file if it exists
+                if zip_path and Path(zip_path).exists():
+                    dest_zip = fails_dir / Path(zip_path).name
+                    shutil.move(str(zip_path), str(dest_zip))
+                    zip_path = str(dest_zip)
+
+                print(f"Moved to: {dest_dir}")
+                self.save_dir = dest_dir
 
         return zip_path
 
@@ -351,7 +372,7 @@ def main(args=None):
     if not terminated_by_done:
         recorder.record_timestep(obs=obs, env_state=env_state, episode_id=episode_id)
 
-    recorder.finalize(auto_zip=not args.no_zip)
+    recorder.finalize(auto_zip=not args.no_zip, final_env_state=env_state)
 
 
 if __name__ == "__main__":
