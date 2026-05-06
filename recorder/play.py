@@ -269,6 +269,17 @@ def main(args=None):
             help="Keep recording after episode ends (default: stop at first done=True)",
         )
         parser.add_argument(
+            "--level_cutoff",
+            type=int,
+            default=2,
+            help="Stop recording when the player enters this level (default: 2). Use --no_level_cutoff to disable.",
+        )
+        parser.add_argument(
+            "--no_level_cutoff",
+            action="store_true",
+            help="Disable the level cutoff and record until quit or done",
+        )
+        parser.add_argument(
             "--output_dir",
             type=str,
             default="trajectory_recordings",
@@ -344,9 +355,9 @@ def main(args=None):
                 done=done,
             )
 
-            # Stop recording after entering level 2 (floors 0, 1, 2 recorded)
-            if env_state.player_level >= 2:
-                print(f"\nEntered level {env_state.player_level}. Stopping recording (floors 0, 1, 2 recorded).")
+            level_cutoff = None if args.no_level_cutoff else args.level_cutoff
+            if level_cutoff is not None and env_state.player_level >= level_cutoff:
+                print(f"\nEntered level {env_state.player_level}. Stopping recording.")
                 break
 
             if done and not args.continue_after_done:
